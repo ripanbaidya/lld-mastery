@@ -79,7 +79,7 @@ Then you add it.
 
 ## **Steps to follow YAGNI Principle** 📝
 
-![](/resources/images/principles/yagni-flow-diagram.png)
+![](/resources/images/principles/yagni-steps-to-follow.png)
 
 To use YAGNI as a developer, it's like having a practical guide to keep your work focused and efficient.
 
