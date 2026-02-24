@@ -8,6 +8,7 @@
 - [Constructor](/oop/constructor/)
 - [this keywords](/oop/this/)
 - [Access Specifiers](/oop/access-modifiers/)
+- [Interfaces](/oop/interfaces/)
 
 **Four pillars of OOP**
 
