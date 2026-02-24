@@ -2,7 +2,7 @@
 
 <p align="right"><b>Last Updated - </b> 24.02.2026</p>
 
-<img src="/Users/ripanbaidya/Documents/system-design/low-level-design/resources/images/principles/dry.png" height="300px" width="500px" align="center" style="border-radius: 10px;"><br>
+<img src="/resources/images/principles/dry.png" height="300px" width="500px" align="center" style="border-radius: 10px;"><br>
 
 **DRY (Don’t Repeat Yourself)** is a principle in programming that means you should avoid writing the same piece of code multiple times.
 
