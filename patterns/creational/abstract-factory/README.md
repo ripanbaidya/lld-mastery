@@ -2,7 +2,7 @@
 
 <p align="right"><b>Last updated: 26.02.2026</b></p>
 
-![abstract-factory-banner](/resources/images/patterns/creational/abstract-factory-banner.png)
+<!-- ![abstract-factory-banner](/resources/images/patterns/creational/abstract-factory-banner.png) -->
 
 ## Introduction 🔥
 
