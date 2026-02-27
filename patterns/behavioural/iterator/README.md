@@ -34,7 +34,7 @@ Think about a TV remote.
 
 ## UML
 
-<img src="/resources/images/patterns/behavioural/iterator-uml.png" height="350" width="550" style="display: block; margin: 0 auto;">
+<img src="/resources/images/patterns/behavioural/iterator-uml.png" height="600" width="650" style="display: block; margin: 0 auto;">
 
 ## Resources
 
