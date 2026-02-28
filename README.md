@@ -31,14 +31,16 @@ What you will find in this **repository**
 
 ### 1️⃣ Creational Patterns
 
-- [Factory Method](/patterns/creational/factory-method/)
-- [Abstract Factory](/patterns/creational/abstract-factory/)
-- [Builder](/patterns/creational/builder/)
-- [Prototype](/patterns/creational/prototype/)
-- [Singleton](/patterns/creational/singleton/)
+- [Factory Method](/patterns/creational/factory-method/) ⭐️
+- [Abstract Factory](/patterns/creational/abstract-factory/) ⭐️
+- [Builder](/patterns/creational/builder/) ⭐️
+- [Prototype](/patterns/creational/prototype/) ⭐️
+- [Singleton](/patterns/creational/singleton/) ⭐️
 
 ### 2️⃣ Behavioral Patterns
 
-- [Strategy](/patterns/behavioural/strategy/)
-- [Observer](/patterns/behavioural/observer/)
-- [Iterator](/patterns/behavioural/iterator/)
+- [Strategy](/patterns/behavioural/strategy/) ⭐️
+- [Observer](/patterns/behavioural/observer/) ⭐️
+- [Iterator](/patterns/behavioural/iterator/) ⭐️
+- [Command](/patterns/behavioural/command/) ⭐️
+- [State](/patterns/behavioural/state/) ⭐️
