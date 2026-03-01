@@ -29,18 +29,38 @@ What you will find in this **repository**
 
 ## Design Patterns
 
-### 1️⃣ Creational Patterns
+| **Creational** 🏗                                          | **Behavioral** 🧠                           | **Structural** 🧩                            |
+| ---------------------------------------------------------- | ------------------------------------------- | -------------------------------------------- |
+| [Singleton](/patterns/creational/singleton/)               | [Strategy](/patterns/behavioural/strategy/) | [Adapter](/patterns/structural/adapter/)     |
+| [Factory](/patterns/creational/factory/)                   | [Observer](/patterns/behavioural/observer/) | [Proxy](/patterns/structural/proxy/)         |
+| [Abstract Factory](/patterns/creational/abstract-factory/) | [Iterator](/patterns/behavioural/iterator/) | [Facade](/patterns/structural/facade/)       |
+| [Builder](/patterns/creational/builder/)                   | [Command](/patterns/behavioural/command/)   | [Decorator](/patterns/structural/decorator/) |
+| [Prototype](/patterns/creational/prototype/)               | [State](/patterns/behavioural/state/)       | [Composite](/patterns/structural/composite/) |
 
-- [Factory Method](/patterns/creational/factory-method/) ⭐️
-- [Abstract Factory](/patterns/creational/abstract-factory/) ⭐️
-- [Builder](/patterns/creational/builder/) ⭐️
-- [Prototype](/patterns/creational/prototype/) ⭐️
-- [Singleton](/patterns/creational/singleton/) ⭐️
+## Multithreading & Concurrency
 
-### 2️⃣ Behavioral Patterns
+## LLD Interview Problems
 
-- [Strategy](/patterns/behavioural/strategy/) ⭐️
-- [Observer](/patterns/behavioural/observer/) ⭐️
-- [Iterator](/patterns/behavioural/iterator/) ⭐️
-- [Command](/patterns/behavioural/command/) ⭐️
-- [State](/patterns/behavioural/state/) ⭐️
+**_Must solve_**
+
+- [Design Tic Tac Toe Game]()
+- [Design Chess Game]()
+- [Design Snake & Food Game]()
+- [Design Parking Lot]()
+- [Design Elevator System]()
+- [Design Inventory Management System]()
+- [Design Car Rental System]()
+- [Design Vending Machine]()
+- [Design File System]()
+- [Design Logging System]()
+- [Design Splitwise]()
+- [Design ATM Machine]()
+
+## Concurrency Interview Problems
+
+- [Producer Consumer Problem]()
+- [Print Zero Even Odd]()
+- [Fizz Buzz Multithreaded]()
+- [Design Bounded Blocking Queue]()
+- [The Dining Philosophers]()
+- [Multithreaded Web Crawler]()
