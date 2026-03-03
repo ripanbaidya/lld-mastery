@@ -7,27 +7,35 @@
  */
 public class RunnableExample implements Runnable {
 
-  /**
-   * Defines the task to be executed by the thread.
-   * This is the entry point for the thread's execution.
-   */
   @Override
   public void run() {
-    System.out.println("Thread is running.");
+    // Logic executed in the child thread
+    for (int i = 0; i < 5; i++) {
+      String currentThreadName = Thread.currentThread().getName();
+      System.out.println("Thread " + currentThreadName + " is running..");
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+    }
   }
 
   public static void main(String[] args) {
-    System.out.println("*------- Thread: Runnable interface -------*");
+    // Create the instance of Runnable
+    RunnableExample runnable = new RunnableExample();
 
-    // 1. Instantiate the task logic.
-    RunnableExample task = new RunnableExample();
+    // 2. Wrap the runnable in a Thread object.
+    Thread t1 = new Thread(runnable);
+    Thread t2 = new Thread(runnable);
 
-    // 2. Wrap the task in a Thread object.
-    // The Thread class acts as the execution manager for the provided Runnable.
-    Thread thread = new Thread(task);
+    // Creating Thread Using Lambda
+    Thread t3 = new Thread(() -> {
+      System.out.println("Thread Created using Lambda");
+    });
 
-    // 3. Initiate the thread.
-    // This causes the JVM to call the run() method in a separate call stack.
-    thread.start();
+    // 3. Start the thread
+    t1.start();
+    t2.start();
   }
 }
