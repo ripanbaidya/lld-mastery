@@ -1,6 +1,6 @@
 /**
  * Demonstrates thread creation by extending the {@code Thread} class.
- * * Note: While simple, this approach ties the task logic directly to the
+ * Note: While simple, this approach ties the task logic directly to the
  * Thread object, making it less flexible than implementing Runnable for
  * sharing resources or extending other classes.
  */
@@ -13,25 +13,37 @@ public class ThreadExample extends Thread {
    */
   @Override
   public void run() {
-    // Logic executed in the child thread
-    System.out.println("Child thread is executing logic...");
+    for (int i = 0; i < 5; i++) {
+      String currentThreadName = Thread.currentThread().getName();
+      System.out.println("Thread " + currentThreadName + " is running..");
+      try {
+        Thread.sleep(500);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+    }
   }
 
   public static void main(String[] args) {
-    System.out.println("*------- Thread: Thread class -------*");
-    
-    // 1. Instantiate the custom thread.
-    // At this point, the thread is in the 'New' state.
+    // 1. Create thread instance
     ThreadExample t1 = new ThreadExample();
+    ThreadExample t2 = new ThreadExample();
 
-    /* 2. Transition the thread to the 'Runnable' state.
-     * The JVM's Thread Scheduler will decide when to actually execute the run() method.
-     * WARNING: Never call t1.run() directly; that would just run the code
-     * synchronously in the main thread!
+    /*
+     * Calling run() directly results in sequential execution within the invoking thread,
+     * without creating a new call stack or execution context.
+     * We can call t1.run() any number of times bcz this would be normal method call.
+     */
+    // t1.run();
+
+    /*
+     * start() is a JVM-level thread creation mechanism that causes the run() method to
+     * execute in a new concurrent execution context.
+     * We can make the call only once, otherwise IllegalThreadStateException will occur
      */
     t1.start();
+    // t1.start(); // java.lang.IllegalThreadStateException
 
-    // 3. Identify the execution context of the main method
-    System.out.println("Main method running in: " + Thread.currentThread().getName());
+    t2.start();
   }
 }
