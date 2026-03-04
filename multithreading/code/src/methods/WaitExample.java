@@ -1,3 +1,5 @@
+package methods;
+
 class WaitExample {
   private static final Object lock = new Object();
 

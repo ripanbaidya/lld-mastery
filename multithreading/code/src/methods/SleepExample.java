@@ -1,3 +1,5 @@
+package methods;
+
 /**
  * sleep() makes the currently running thread sleep for the specified amount of time
  * without releasing locks
