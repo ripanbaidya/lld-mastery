@@ -43,18 +43,24 @@ What you will find in this **repository**
 
 **_Must solve_**
 
-- [Design Tic Tac Toe Game]()
-- [Design Chess Game]()
-- [Design Snake & Food Game]()
-- [Design Parking Lot]()
-- [Design Elevator System]()
-- [Design Inventory Management System]()
-- [Design Car Rental System]()
-- [Design Vending Machine]()
-- [Design File System]()
-- [Design Logging System]()
-- [Design Splitwise]()
-- [Design ATM Machine]()
+- [Parking Lot]()
+- [Snake and Ladder]()
+- [Tic Tac Toe Game]()
+- [Vending Machine]()
+- [Elevator System]()
+- [ATM Machine]()
+- [Library Management System]()
+- [Notification Service]()
+- [Online Aucation System]()
+- [In Memeory Cache]()
+- [Logging System]()
+- [Splitwise]()
+- [Chess Game]()
+- [File System]()
+- [Movie Booking Systen (BookMyShow)]()
+- [Ride Sharing App(Uber/ Ola)]()
+- [Rate Limiter]()
+
 
 ## Concurrency Interview Problems
 
