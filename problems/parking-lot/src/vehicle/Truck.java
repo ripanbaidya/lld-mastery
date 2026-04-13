@@ -1,0 +1,20 @@
+package vehicle;
+
+public class Truck implements Vehicle {
+
+    private String licensePlate;
+
+    public Truck(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    @Override
+    public String getLicencePlate() {
+        return licensePlate;
+    }
+
+    @Override
+    public VehicleSize getSize() {
+        return VehicleSize.LARGE;
+    }
+}

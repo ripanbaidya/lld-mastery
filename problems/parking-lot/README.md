@@ -55,19 +55,19 @@ With these requirements set, we now identify the core objects.
 
 Before diving into the design, it’s important to enumerate the core objects.
 
-- **Vehicle**: This object represents a vehicle that needs a spot. It encapsulates details like the license plate and size (small for motorcycles, medium for cars, large for trucks), serving as the foundation for spot assignment and fee calculation.
+- **vehicle.Vehicle**: This object represents a vehicle that needs a spot. It encapsulates details like the license plate and size (small for motorcycles, medium for cars, large for trucks), serving as the foundation for spot assignment and fee calculation.
 
-- **ParkingSpot**: This object models an individual parking spot in the parking lot. It’s the physical space where a Vehicle parks, ensuring only appropriately sized vehicles can park based on its capacity.
+- **parkingspot.ParkingSpot**: This object models an individual parking spot in the parking lot. It’s the physical space where a vehicle.Vehicle parks, ensuring only appropriately sized vehicles can park based on its capacity.
 
-- **Ticket**: This object represents a parking ticket issued when a Vehicle enters the parking lot. It stores critical details, including the ticket ID, the associated Vehicle, the assigned ParkingSpot, and entry time, which are later used to calculate fees and free up spots upon exit.
+- **Ticket**: This object represents a parking ticket issued when a vehicle.Vehicle enters the parking lot. It stores critical details, including the ticket ID, the associated vehicle.Vehicle, the assigned parkingspot.ParkingSpot, and entry time, which are later used to calculate fees and free up spots upon exit.
 
-- **ParkingManager**: This object oversees the parking lot’s spot allocation, managing the assignment, lookup, and release of ParkingSpot instances. It ensures a Vehicle gets the right spot by checking availability based on size, and updates the system when vehicles leave, keeping parking operations smooth and efficient.
+- **ParkingManager**: This object oversees the parking lot’s spot allocation, managing the assignment, lookup, and release of parkingspot.ParkingSpot instances. It ensures a vehicle.Vehicle gets the right spot by checking availability based on size, and updates the system when vehicles leave, keeping parking operations smooth and efficient.
 
 - **ParkingLot**: This acts as a facade, providing a central interface to manage the system’s key functionalities: vehicle entry, spot assignment, ticketing, and fee calculation. It keeps its logic lightweight by delegating tasks such as spot allocation to the ParkingManager, fee computation to a FareCalculator class, and coordinating the flow of vehicles in and out without handling the details.
 
 ⚠️ **Design choice**:
 
-> We chose these five objects to separate concerns. Vehicle and ParkingSpot define the core physical entities, Ticket tracks sessions, ParkingManager handles allocation, and ParkingLot coordinates as a facade.
+> We chose these five objects to separate concerns. vehicle.Vehicle and parkingspot.ParkingSpot define the core physical entities, Ticket tracks sessions, ParkingManager handles allocation, and ParkingLot coordinates as a facade.
 
 _**Note**: To learn more about the Facade Pattern and its common use cases, refer to the Further Reading section at the end of this chapter._
 
@@ -75,31 +75,31 @@ _**Note**: To learn more about the Facade Pattern and its common use cases, refe
 
 Now that we’ve identified the core objects and their responsibilities, the next step is to design the classes and methods that bring the parking lot system to life.
 
-### Vehicle
+### vehicle.Vehicle
 
-We have modeled the Vehicle as an interface to set a standard for all vehicle types. It defines two key methods:
+We have modeled the vehicle.Vehicle as an interface to set a standard for all vehicle types. It defines two key methods:
 
 - getLicensePlate(): Returns the vehicle’s license plate number.
-- getSize(): Returns a VehicleSize enum (SMALL, MEDIUM, LARGE), indicating
+- getSize(): Returns a vehicle.VehicleSize enum (SMALL, MEDIUM, LARGE), indicating
   the space it occupies.
 
-Concrete classes like Motorcycle, Car, and Truck implement the Vehicle interface, each defining its size:
+Concrete classes like vehicle.Motorcycle, vehicle.Car, and vehicle.Truck implement the vehicle.Vehicle interface, each defining its size:
 
-- Motorcycle: Small-sized.
-- Car: Medium-sized.
-- Truck: Large-sized.
+- vehicle.Motorcycle: Small-sized.
+- vehicle.Car: Medium-sized.
+- vehicle.Truck: Large-sized.
 
-Below is the representation of the **Vehicle interface and its concrete classes**.
+Below is the representation of the **vehicle.Vehicle interface and its concrete classes**.
 
-<img src="/resources/images/problems/parking-lot/vehicle-and-its-concrete-classes.png" alt="Vehicle interface and its concrete classes" height="300" width="550" align="center">
+<img src="/resources/images/problems/parking-lot/vehicle-and-its-concrete-classes.png" alt="vehicle.Vehicle interface and its concrete classes" height="300" width="550" align="center">
 
 ⚠️ **Design Choice**
 
-> You might wonder: why use a getSize() method instead of a getType() method in the Vehicle class? Using getType() would tie us to specific vehicle names like "Motorcycle" or "Car", forcing updates to the system’s logic every time a new type (say, "Scooter") comes along. For example, fee calculations or spot assignments would need new cases for each type. With getSize(), we abstract that away. The parking lot cares more about the size of a vehicle, such as small, medium, or large, than its exact type. A truck and a van might both be large, so they’re treated the same for parking purposes. Adding an electric scooter? Just mark its size as small, and it fits in like a motorcycle. This keeps the system lean and adaptable, focusing on space over semantics.
+> You might wonder: why use a getSize() method instead of a getType() method in the vehicle.Vehicle class? Using getType() would tie us to specific vehicle names like "vehicle.Motorcycle" or "vehicle.Car", forcing updates to the system’s logic every time a new type (say, "Scooter") comes along. For example, fee calculations or spot assignments would need new cases for each type. With getSize(), we abstract that away. The parking lot cares more about the size of a vehicle, such as small, medium, or large, than its exact type. A truck and a van might both be large, so they’re treated the same for parking purposes. Adding an electric scooter? Just mark its size as small, and it fits in like a motorcycle. This keeps the system lean and adaptable, focusing on space over semantics.
 
-### ParkingSpot
+### parkingspot.ParkingSpot
 
-The ParkingSpot interface represents a parking spot in the parking lot system. It captures spot-specific details, such as whether it’s occupied and its size. Concrete parking spot types (CompactSpot, RegularSpot, and OversizedSpot) are implemented as classes that adhere to the ParkingSpot interface. These classes bring the interface to life, defining spots for small, medium, and large vehicles, respectively.
+The parkingspot.ParkingSpot interface represents a parking spot in the parking lot system. It captures spot-specific details, such as whether it’s occupied and its size. Concrete parking spot types (CompactSpot, RegularSpot, and OversizedSpot) are implemented as classes that adhere to the parkingspot.ParkingSpot interface. These classes bring the interface to life, defining spots for small, medium, and large vehicles, respectively.
 
 The UML diagram of **Parking Spot and its concrete classes** below illustrates this structure.
 
@@ -107,14 +107,14 @@ The UML diagram of **Parking Spot and its concrete classes** below illustrates t
 
 ⚠️ **Design choice:**
 
-> The ParkingSpot class is intentionally designed to be simple, only encompassing its state (e.g., availability and size). The ParkingManager class is responsible for more complex operations, such as locating available parking spots and monitoring parked vehicles. This design choice promotes adding new spot types without introducing unnecessary complexity.
+> The parkingspot.ParkingSpot class is intentionally designed to be simple, only encompassing its state (e.g., availability and size). The ParkingManager class is responsible for more complex operations, such as locating available parking spots and monitoring parked vehicles. This design choice promotes adding new spot types without introducing unnecessary complexity.
 
 ### ParkingManager
 
 The ParkingManager is responsible for managing the allocation and tracking of parking spots within the parking lot system. Its primary functions include identifying available parking spaces, assigning the most suitable spot for each vehicle, and maintaining a record of parked vehicles and their locations. These tasks are accomplished through two key methods.
 
-- parkVehicle(Vehicle vehicle): Assigns a spot that matches the vehicle’s size when it arrives.
-- unparkVehicle(Vehicle vehicle): Frees up the spot when the vehicle leaves, ensuring the system stays up-to-date.
+- parkVehicle(vehicle.Vehicle vehicle): Assigns a spot that matches the vehicle’s size when it arrives.
+- unparkVehicle(vehicle.Vehicle vehicle): Frees up the spot when the vehicle leaves, ensuring the system stays up-to-date.
 
 Here is the representation of the ParkingManager class.
 
@@ -134,7 +134,7 @@ Below is the representation of the Ticket class.
 
 ⚠️ **Design Choice**
 
-> The Ticket class is designed as a concise, immutable record of a parking event, capturing essential details such as the ticket ID, associated Vehicle, assigned ParkingSpot, entry time, and exit time. Its primary role is to serve as a data container, ensuring simplicity and focus by delegating complex logic, such as parking fee calculation, to the FareCalculator class.
+> The Ticket class is designed as a concise, immutable record of a parking event, capturing essential details such as the ticket ID, associated vehicle.Vehicle, assigned parkingspot.ParkingSpot, entry time, and exit time. Its primary role is to serve as a data container, ensuring simplicity and focus by delegating complex logic, such as parking fee calculation, to the FareCalculator class.
 
 ### FareStrategy and FareCalculator
 
@@ -183,24 +183,24 @@ With this design in place, we move to implementation.
 
 In this section, we’ll implement the core functionalities of the parking lot system, focusing on key areas such as managing vehicle entry and exit, assigning parking spots efficiently, and calculating parking fees accurately.
 
-### Vehicle
+### vehicle.Vehicle
 
-We define the Vehicle interface, along with its supporting VehicleSize enum and concrete classes Motorcycle, Car, and Truck, to set up how vehicles are identified and sized in the parking lot system.
+We define the vehicle.Vehicle interface, along with its supporting vehicle.VehicleSize enum and concrete classes vehicle.Motorcycle, vehicle.Car, and vehicle.Truck, to set up how vehicles are identified and sized in the parking lot system.
 
 Here is the implementation of this interface and its concrete classes.
 
 ```java
-public interface Vehicle {
+public interface vehicle.Vehicle {
     String getLicensePlate();
 
-    VehicleSize getSize();
+    vehicle.VehicleSize getSize();
 
 }
 
-public class Car implements Vehicle {
+public class vehicle.Car implements vehicle.Vehicle {
     private String licensePlate;
 
-    public Car(String licensePlate) {
+    public vehicle.Car(String licensePlate) {
         this.licensePlate = licensePlate;
     }
 
@@ -210,13 +210,13 @@ public class Car implements Vehicle {
     }
 
     @Override
-    public VehicleSize getSize() {
-        return VehicleSize.MEDIUM;
+    public vehicle.VehicleSize getSize() {
+        return vehicle.VehicleSize.MEDIUM;
     }
 
 }
 
-public enum VehicleSize {
+public enum vehicle.VehicleSize {
   SMALL,
   MEDIUM,
   LARGE
@@ -225,94 +225,103 @@ public enum VehicleSize {
 
 This interface ensures every vehicle provides two key attributes: a license plate for tracking and a size for managing parking spaces. This design ensures that every vehicle provides consistent, type-safe attributes critical for tracking, parking spot allocation, and fee calculation
 
-For the sake of brevity, we have not shown the code for the Motorcycle and Truck classes.
+For the sake of brevity, we have not shown the code for the vehicle.Motorcycle and vehicle.Truck classes.
 
-**Implementation choice**: The VehicleSize enum (SMALL, MEDIUM, LARGE) standardizes vehicle and parking spot sizes, ensuring type-safe, error-free size comparisons for efficient spot allocation and fee calculation.
+**Implementation choice**: The vehicle.VehicleSize enum (SMALL, MEDIUM, LARGE) standardizes vehicle and parking spot sizes, ensuring type-safe, error-free size comparisons for efficient spot allocation and fee calculation.
 
 **Alternatives and trade-offs:**
 
 - **Strings**: Prone to typos and slower comparisons (O(n)), requiring validation. Rejected for fragility and performance issues.
 - **Integers**: Ambiguous and error-prone, lacking type safety. Rejected for reduced clarity and reliability.
 
-### ParkingSpot
+### parkingspot.ParkingSpot
 
-We define the ParkingSpot interface to represent individual parking spots in the parking lot system, along with its concrete classes CompactSpot, RegularSpot, and OversizedSpot.
+We define the parkingspot.ParkingSpot interface to represent individual parking spots in the parking lot system, along with its concrete classes CompactSpot, RegularSpot, and OversizedSpot.
 
-Here’s the code for the ParkingSpot interface:
+Here’s the code for the parkingspot.ParkingSpot interface:
 
 ```java
-public interface ParkingSpot {
-    boolean isAvailable();
 
-    void occupy(Vehicle vehicle);
+import vehicle.VehicleSize;
 
-    void vacate();
+public interface parkingspot.
 
-    int getSpotNumber();
+ParkingSpot {
+  boolean isAvailable ();
 
-    VehicleSize getSize();
+  void occupy (Vehicle vehicle);
+
+  void vacate ();
+
+  int getSpotNumber ();
+
+  VehicleSize getSize ();
 
 }
 ```
 
 - **isAvailable():** Checks if the spot is free. Helps ParkingManager decide if the spot can be assigned.
 
-- **occupy(Vehicle vehicle):** Assigns a vehicle to the spot if it’s available, setting vehicle to the provided instance.
+- **occupy(vehicle.Vehicle vehicle):** Assigns a vehicle to the spot if it’s available, setting vehicle to the provided instance.
 
 - **vacate():** Clears the spot by setting the vehicle to null, making the spot free for reuse. Allows ParkingManager to reassign it to another vehicle.
 
-- **getSize():** Returns the spot’s fixed VehicleSize (e.g., SMALL for CompactSpot). Guides ParkingManager in matching vehicle sizes to parking spot capacities.
+- **getSize():** Returns the spot’s fixed vehicle.VehicleSize (e.g., SMALL for CompactSpot). Guides ParkingManager in matching vehicle sizes to parking spot capacities.
 
 The concrete class CompactSpot implements this interface:
 
 ```java
+import parkingspot.ParkingSpot;
+import vehicle.Vehicle;
+import vehicle.VehicleSize;
+
 public class CompactSpot implements ParkingSpot {
-private int spotNumber;
-private Vehicle vehicle; // The vehicle currently occupying this spot
+  private int spotNumber;
+  private Vehicle vehicle; // The vehicle currently occupying this spot
 
-    public CompactSpot(int spotNumber) {
-        this.spotNumber = spotNumber;
-        this.vehicle = null; // No vehicle occupying initially
-    }
+  public CompactSpot(int spotNumber) {
+    this.spotNumber = spotNumber;
+    this.vehicle = null; // No vehicle occupying initially
+  }
 
-    @Override
-    public int getSpotNumber() {
-        return spotNumber;
-    }
+  @Override
+  public int getSpotNumber() {
+    return spotNumber;
+  }
 
-    @Override
-    public boolean isAvailable() {
-        return vehicle == null;
-    }
+  @Override
+  public boolean isAvailable() {
+    return vehicle == null;
+  }
 
-    @Override
-    public void occupy(Vehicle vehicle) {
-        if (isAvailable()) {
-            this.vehicle = vehicle;
-        } else {
-            // Spot is already occupied.
-        }
+  @Override
+  public void occupy(Vehicle vehicle) {
+    if (isAvailable()) {
+      this.vehicle = vehicle;
+    } else {
+      // Spot is already occupied.
     }
+  }
 
-    @Override
-    public void vacate() {
-        this.vehicle = null; // Make the spot available
-    }
+  @Override
+  public void vacate() {
+    this.vehicle = null; // Make the spot available
+  }
 
-    @Override
-    public VehicleSize getSize() {
-        return VehicleSize.SMALL; // Compact spots fit small vehicles
-    }
+  @Override
+  public VehicleSize getSize() {
+    return VehicleSize.SMALL; // Compact spots fit small vehicles
+  }
 
 }
 ```
 
 For brevity, we omit the full code of RegularSpot and OversizedSpot, but they follow a similar structure:
 
-- **RegularSpot**: Returns VehicleSize.MEDIUM, suitable for medium-sized vehicles like cars.
-- **OversizedSpot**: Returns VehicleSize.LARGE, designed for large vehicles like trucks.
+- **RegularSpot**: Returns vehicle.VehicleSize.MEDIUM, suitable for medium-sized vehicles like cars.
+- **OversizedSpot**: Returns vehicle.VehicleSize.LARGE, designed for large vehicles like trucks.
 
-This implementation keeps ParkingSpot lean and focused, managing its state while delegating allocation logic to ParkingManager.
+This implementation keeps parkingspot.ParkingSpot lean and focused, managing its state while delegating allocation logic to ParkingManager.
 
 ### ParkingManager
 
@@ -321,65 +330,69 @@ The ParkingManager class manages the allocation and tracking of parking spots in
 Here’s the implementation of this class:
 
 ```java
+import parkingspot.ParkingSpot;
+import vehicle.Vehicle;
+import vehicle.VehicleSize;
+
 public class ParkingManager {
-    private final Map<VehicleSize, List<ParkingSpot>> availableSpots;
-    private final Map<Vehicle, ParkingSpot> vehicleToSpotMap;
+  private final Map<VehicleSize, List<ParkingSpot>> availableSpots;
+  private final Map<Vehicle, ParkingSpot> vehicleToSpotMap;
 
-    // Create Parking Manager based on a given map of available spots
-    public ParkingManager(Map<VehicleSize, List<ParkingSpot>> availableSpots) {
-        this.availableSpots = availableSpots;
-        this.vehicleToSpotMap = new HashMap<>();
-    }
+  // Create Parking Manager based on a given map of available spots
+  public ParkingManager(Map<VehicleSize, List<ParkingSpot>> availableSpots) {
+    this.availableSpots = availableSpots;
+    this.vehicleToSpotMap = new HashMap<>();
+  }
 
-    public ParkingSpot findSpotForVehicle(Vehicle vehicle) {
-        VehicleSize vehicleSize = vehicle.getSize();
+  public ParkingSpot findSpotForVehicle(Vehicle vehicle) {
+    VehicleSize vehicleSize = vehicle.getSize();
 
-        // Start looking for the smallest spot that can fit the vehicle
-        for (VehicleSize size : VehicleSize.values()) {
-            if (size.ordinal() >= vehicleSize.ordinal()) {
-                List<ParkingSpot> spots = availableSpots.get(size);
-                for (ParkingSpot spot : spots) {
-                    if (spot.isAvailable()) {
-                        return spot; // Return the first available spot
-                    }
-                }
-            }
+    // Start looking for the smallest spot that can fit the vehicle
+    for (VehicleSize size : VehicleSize.values()) {
+      if (size.ordinal() >= vehicleSize.ordinal()) {
+        List<ParkingSpot> spots = availableSpots.get(size);
+        for (ParkingSpot spot : spots) {
+          if (spot.isAvailable()) {
+            return spot; // Return the first available spot
+          }
         }
-        return null; // No suitable spot found
+      }
     }
+    return null; // No suitable spot found
+  }
 
-    public ParkingSpot parkVehicle(Vehicle vehicle) {
-        ParkingSpot spot = findSpotForVehicle(vehicle);
-        if (spot != null) {
-            spot.occupy(vehicle); // Record the parking spot for the vehicle
-            vehicleToSpotMap.put(vehicle, spot); // Remove the spot from the available list
-            availableSpots.get(spot.getSize()).remove(spot);
-            return spot; // Parking successful
-        }
-        return null; // No spot found for this vehicle
+  public ParkingSpot parkVehicle(Vehicle vehicle) {
+    ParkingSpot spot = findSpotForVehicle(vehicle);
+    if (spot != null) {
+      spot.occupy(vehicle); // Record the parking spot for the vehicle
+      vehicleToSpotMap.put(vehicle, spot); // Remove the spot from the available list
+      availableSpots.get(spot.getSize()).remove(spot);
+      return spot; // Parking successful
     }
+    return null; // No spot found for this vehicle
+  }
 
-    public void unparkVehicle(Vehicle vehicle) {
-        ParkingSpot spot = vehicleToSpotMap.remove(vehicle);
-        if (spot != null) {
-            spot.vacate();
-            availableSpots.get(spot.getSize()).add(spot);
-        }
+  public void unparkVehicle(Vehicle vehicle) {
+    ParkingSpot spot = vehicleToSpotMap.remove(vehicle);
+    if (spot != null) {
+      spot.vacate();
+      availableSpots.get(spot.getSize()).add(spot);
     }
+  }
 
 }
 ```
 
-**findSpotForVehicle(Vehicle vehicle):**
+**findSpotForVehicle(vehicle.Vehicle vehicle):**
 
 - Searches for an available parking spot that fits the vehicle’s size.
 
-**parkVehicle(Vehicle vehicle):**
+**parkVehicle(vehicle.Vehicle vehicle):**
 
 - Assigns a parking spot to the vehicle by calling findSpotForVehicle() and then marks it as occupied via occupy().
 - Records the vehicle-spot pair and removes the spot from the available pool, ensuring accurate tracking and availability updates.
 
-**unparkVehicle(Vehicle vehicle):**
+**unparkVehicle(vehicle.Vehicle vehicle):**
 
 - Retrieves the parking spot for the given vehicle, frees the spot via vacate(), and adds it back to the available pool.
 - Removes the vehicle-spot mapping, keeping the system’s state current for future allocations.
@@ -388,13 +401,13 @@ public class ParkingManager {
 
 As shown in the code above, we used two HashMaps. Let’s understand their purpose.
 
-- The availableSpots map maintains a list of parking spots ready for use, organized by VehicleSize. It ensures that vehicles land in the best-fit parking spot. For instance, motorcycles fit into small spots like CompactSpot, while cars use medium spots like RegularSpot. This organization allows ParkingManager to quickly find the smallest, most suitable size available.
+- The availableSpots map maintains a list of parking spots ready for use, organized by vehicle.VehicleSize. It ensures that vehicles land in the best-fit parking spot. For instance, motorcycles fit into small spots like CompactSpot, while cars use medium spots like RegularSpot. This organization allows ParkingManager to quickly find the smallest, most suitable size available.
 - The vehicleToSpotMap records which parking spot each vehicle occupies. It allows ParkingManager to locate and free up a parking spot when a vehicle leaves, keeping the system’s state up to date.
 
 Here’s why these choices matter:
 
 - **Performance**: Using HashMaps provides O(1) time complexity for accessing parking spots by size or finding a vehicle’s parking spot. However, checking availability within a specific size requires additional steps.
-- **Best Fit**: Organizing parking spots by VehicleSize ensures vehicles park in the smallest spot that fits them, optimizing space usage.
+- **Best Fit**: Organizing parking spots by vehicle.VehicleSize ensures vehicles park in the smallest spot that fits them, optimizing space usage.
 
 ### Ticket
 
@@ -403,30 +416,33 @@ The Ticket class acts as a record of a parking event, linking a vehicle to its p
 Below is the implementation of this class.
 
 ```java
+import parkingspot.ParkingSpot;
+import vehicle.Vehicle;
+
 public class Ticket {
-    private final String ticketId; // Unique ticket identifier
-    private final Vehicle vehicle; // The vehicle associated with the ticket
-    private final ParkingSpot parkingSpot; // The parking spot where the vehicle is parked
-    private final LocalDateTime entryTime; // The time the vehicle entered the parking lot
-    private LocalDateTime exitTime; // The time the vehicle exited the parking lot
+  private final String ticketId; // Unique ticket identifier
+  private final Vehicle vehicle; // The vehicle associated with the ticket
+  private final ParkingSpot parkingSpot; // The parking spot where the vehicle is parked
+  private final LocalDateTime entryTime; // The time the vehicle entered the parking lot
+  private LocalDateTime exitTime; // The time the vehicle exited the parking lot
 
-    public Ticket(
-            String ticketId, Vehicle vehicle, ParkingSpot parkingSpot, LocalDateTime entryTime) {
-        this.ticketId = ticketId;
-        this.vehicle = vehicle;
-        this.parkingSpot = parkingSpot;
-        this.entryTime = entryTime;
-        // Initially, exitTime is null because the vehicle is still parked
-        this.exitTime = null;
-    }
+  public Ticket(
+          String ticketId, Vehicle vehicle, ParkingSpot parkingSpot, LocalDateTime entryTime) {
+    this.ticketId = ticketId;
+    this.vehicle = vehicle;
+    this.parkingSpot = parkingSpot;
+    this.entryTime = entryTime;
+    // Initially, exitTime is null because the vehicle is still parked
+    this.exitTime = null;
+  }
 
-    public BigDecimal calculateParkingDuration() {
-        return new BigDecimal(
-                Duration.between(
-                                entryTime,
-                                Objects.requireNonNullElseGet(exitTime, LocalDateTime::now))
-                        .toMinutes());
-    } // getter and setter methods are omitted for brevity
+  public BigDecimal calculateParkingDuration() {
+    return new BigDecimal(
+            Duration.between(
+                            entryTime,
+                            Objects.requireNonNullElseGet(exitTime, LocalDateTime::now))
+                    .toMinutes());
+  } // getter and setter methods are omitted for brevity
 
 }
 ```
@@ -544,52 +560,55 @@ The ParkingLot class acts as a facade, providing a simple interface for clients 
 Here’s the implementation of the ParkingLot class:
 
 ```java
+import parkingspot.ParkingSpot;
+import vehicle.Vehicle;
+
 public class ParkingLot {
-    // Manages parking spots and vehicle assignments
-    private final ParkingManager parkingManager;
-    // Calculates fare for parking sessions
-    private final FareCalculator fareCalculator;
+  // Manages parking spots and vehicle assignments
+  private final ParkingManager parkingManager;
+  // Calculates fare for parking sessions
+  private final FareCalculator fareCalculator;
 
-    public ParkingLot(ParkingManager parkingManager, FareCalculator fareCalculator) {
-        this.parkingManager = parkingManager;
-        this.fareCalculator = fareCalculator;
+  public ParkingLot(ParkingManager parkingManager, FareCalculator fareCalculator) {
+    this.parkingManager = parkingManager;
+    this.fareCalculator = fareCalculator;
+  }
+
+  // Method to handle vehicle entry into the parking lot
+  public Ticket enterVehicle(Vehicle vehicle) {
+    // Delegate parking logic to ParkingManager
+    ParkingSpot spot = parkingManager.parkVehicle(vehicle);
+
+    if (spot != null) {
+      // Create ticket with entry time
+      Ticket ticket = new Ticket(generateTicketId(), vehicle, spot, LocalDateTime.now());
+      return ticket;
+    } else {
+      return null; // No spot available
     }
+  }
 
-    // Method to handle vehicle entry into the parking lot
-    public Ticket enterVehicle(Vehicle vehicle) {
-        // Delegate parking logic to ParkingManager
-        ParkingSpot spot = parkingManager.parkVehicle(vehicle);
+  // Method to handle vehicle exit from the parking lot
+  public void leaveVehicle(Ticket ticket) {
+    // Ensure the ticket is valid and the vehicle hasn't already left
+    if (ticket != null && ticket.getExitTime() == null) {
+      // Set exit time
+      ticket.setExitTime(LocalDateTime.now());
 
-        if (spot != null) {
-            // Create ticket with entry time
-            Ticket ticket = new Ticket(generateTicketId(), vehicle, spot, LocalDateTime.now());
-            return ticket;
-        } else {
-            return null; // No spot available
-        }
+      // Delegate unparking logic to ParkingManager
+      parkingManager.unparkVehicle(ticket.getVehicle());
+
+      // Calculate the fare
+      BigDecimal fare = fareCalculator.calculateFare(ticket);
+    } else {
+      // Invalid ticket or vehicle already exited.
     }
-
-    // Method to handle vehicle exit from the parking lot
-    public void leaveVehicle(Ticket ticket) {
-        // Ensure the ticket is valid and the vehicle hasn't already left
-        if (ticket != null && ticket.getExitTime() == null) {
-            // Set exit time
-            ticket.setExitTime(LocalDateTime.now());
-
-            // Delegate unparking logic to ParkingManager
-            parkingManager.unparkVehicle(ticket.getVehicle());
-
-            // Calculate the fare
-            BigDecimal fare = fareCalculator.calculateFare(ticket);
-        } else {
-            // Invalid ticket or vehicle already exited.
-        }
-    }
+  }
 
 }
 ```
 
-**enterVehicle(Vehicle vehicle)**: Coordinates vehicle entry by requesting a parking spot from ParkingManager. It then generates a Ticket with a unique ID, vehicle, parking spot, and current entry time.
+**enterVehicle(vehicle.Vehicle vehicle)**: Coordinates vehicle entry by requesting a parking spot from ParkingManager. It then generates a Ticket with a unique ID, vehicle, parking spot, and current entry time.
 
 **leaveVehicle(Ticket ticket)**: Manages vehicle exit by setting the exit time, frees the parking spot via ParkingManager, and calculates the fare with FareCalculator.
 
@@ -601,59 +620,63 @@ In this section, we’ll cover common follow-up questions interviewers may ask a
 
 The parking lot system is designed to support multiple parking spot types (e.g., CompactSpot, RegularSpot, OversizedSpot). However, there may be a need to introduce a new type, such as a handicapped parking spot, to accommodate specific requirements like accessibility. The challenge is to extend the system efficiently without modifying existing classes, adhering to the Open-Closed Principle (open for extension, closed for modification).
 
-To achieve this, we can introduce a new HandicappedSpot class that implements the existing ParkingSpot interface. This approach ensures smooth integration with the system’s spot allocation and management logic, as ParkingManager already relies on the ParkingSpot interface for handling spots.
+To achieve this, we can introduce a new HandicappedSpot class that implements the existing parkingspot.ParkingSpot interface. This approach ensures smooth integration with the system’s spot allocation and management logic, as ParkingManager already relies on the parkingspot.ParkingSpot interface for handling spots.
 
-<img src="/resources/images/problems/parking-lot/parking-spot-with-handicapped-spot.png" height="300" width="500" align="center" alt="ParkingSpot with HandicappedSpot class">
+<img src="/resources/images/problems/parking-lot/parking-spot-with-handicapped-spot.png" height="300" width="500" align="center" alt="parkingspot.ParkingSpot with HandicappedSpot class">
 
 Below is the implementation of the HandicappedSpot class.
 
 ```java
+import parkingspot.ParkingSpot;
+import vehicle.Vehicle;
+import vehicle.VehicleSize;
+
 public class HandicappedSpot implements ParkingSpot {
-    private int spotNumber;
-    private Vehicle vehicle;
+  private int spotNumber;
+  private Vehicle vehicle;
 
-    public HandicappedSpot(int spotNumber) {
-        this.spotNumber = spotNumber;
-        this.vehicle = null;
-    }
+  public HandicappedSpot(int spotNumber) {
+    this.spotNumber = spotNumber;
+    this.vehicle = null;
+  }
 
-    @Override
-    public int getSpotNumber() {
-        return spotNumber;
-    }
+  @Override
+  public int getSpotNumber() {
+    return spotNumber;
+  }
 
-    @Override
-    public boolean isAvailable() {
-        return vehicle == null;
-    }
+  @Override
+  public boolean isAvailable() {
+    return vehicle == null;
+  }
 
-    @Override
-    public void occupy(Vehicle vehicle) {
-        if (isAvailable()) {
-            this.vehicle = vehicle;
-        } else {
-            // Spot is already occupied.
-        }
+  @Override
+  public void occupy(Vehicle vehicle) {
+    if (isAvailable()) {
+      this.vehicle = vehicle;
+    } else {
+      // Spot is already occupied.
     }
+  }
 
-    @Override
-    public void vacate() {
-        this.vehicle = null;
-    }
+  @Override
+  public void vacate() {
+    this.vehicle = null;
+  }
 
-    @Override
-    public VehicleSize getSize() {
-        return VehicleSize.MEDIUM;
-    }
+  @Override
+  public VehicleSize getSize() {
+    return VehicleSize.MEDIUM;
+  }
 
 }
 ```
 
 ## Faster Parking Spot Management
 
-The mapping we currently have is one-way: from Vehicle to ParkingSpot. This allows us to quickly find the parking spot assigned to a specific vehicle. But what if we want to find which vehicle is parked in a specific spot? Without a reverse mapping, we would need to search through all parking spots, which isn’t efficient. Can we do better?
+The mapping we currently have is one-way: from vehicle.Vehicle to parkingspot.ParkingSpot. This allows us to quickly find the parking spot assigned to a specific vehicle. But what if we want to find which vehicle is parked in a specific spot? Without a reverse mapping, we would need to search through all parking spots, which isn’t efficient. Can we do better?
 
-We can enhance this by introducing another HashMap, called spotToVehicleMap, to track the reverse mapping from ParkingSpot to Vehicle.
+We can enhance this by introducing another HashMap, called spotToVehicleMap, to track the reverse mapping from parkingspot.ParkingSpot to vehicle.Vehicle.
 
 With this approach, we use two HashMaps:
 
@@ -663,54 +686,58 @@ With this approach, we use two HashMaps:
 Below is the updated ParkingManager class.
 
 ```java
+import parkingspot.ParkingSpot;
+import vehicle.Vehicle;
+import vehicle.VehicleSize;
+
 public class ParkingManager {
-    private final Map<VehicleSize, List<ParkingSpot>> availableSpots;
-    private final Map<Vehicle, ParkingSpot> vehicleToSpotMap;
-    private final Map<ParkingSpot, Vehicle> spotToVehicleMap;
+  private final Map<VehicleSize, List<ParkingSpot>> availableSpots;
+  private final Map<Vehicle, ParkingSpot> vehicleToSpotMap;
+  private final Map<ParkingSpot, Vehicle> spotToVehicleMap;
 
-    // Create Parking Manager based on a given map of available spots
-    public ParkingManager(Map<VehicleSize, List<ParkingSpot>> availableSpots) {
-        this.availableSpots = availableSpots;
-        this.vehicleToSpotMap = new HashMap<>();
-        this.spotToVehicleMap = new HashMap<>();
-    }
+  // Create Parking Manager based on a given map of available spots
+  public ParkingManager(Map<VehicleSize, List<ParkingSpot>> availableSpots) {
+    this.availableSpots = availableSpots;
+    this.vehicleToSpotMap = new HashMap<>();
+    this.spotToVehicleMap = new HashMap<>();
+  }
 
-    public ParkingSpot findSpotForVehicle(Vehicle vehicle) {
-        // No change in the method
-    }
+  public ParkingSpot findSpotForVehicle(Vehicle vehicle) {
+    // No change in the method
+  }
 
-    public ParkingSpot parkVehicle(Vehicle vehicle) {
-        ParkingSpot spot = findSpotForVehicle(vehicle);
-        if (spot != null) {
-            spot.occupy(vehicle);
-            // Record bidirectional mapping
-            vehicleToSpotMap.put(vehicle, spot);
-            spotToVehicleMap.put(spot, vehicle);
-            // Remove the spot from the available list
-            availableSpots.get(spot.getSize()).remove(spot);
-            return spot; // Parking successful
-        }
-        return null; // No spot found for this vehicle
+  public ParkingSpot parkVehicle(Vehicle vehicle) {
+    ParkingSpot spot = findSpotForVehicle(vehicle);
+    if (spot != null) {
+      spot.occupy(vehicle);
+      // Record bidirectional mapping
+      vehicleToSpotMap.put(vehicle, spot);
+      spotToVehicleMap.put(spot, vehicle);
+      // Remove the spot from the available list
+      availableSpots.get(spot.getSize()).remove(spot);
+      return spot; // Parking successful
     }
+    return null; // No spot found for this vehicle
+  }
 
-    public void unparkVehicle(Vehicle vehicle) {
-        ParkingSpot spot = vehicleToSpotMap.remove(vehicle);
-        if (spot != null) {
-            spotToVehicleMap.remove(spot);
-            spot.vacate();
-            availableSpots.get(spot.getSize()).add(spot);
-        }
+  public void unparkVehicle(Vehicle vehicle) {
+    ParkingSpot spot = vehicleToSpotMap.remove(vehicle);
+    if (spot != null) {
+      spotToVehicleMap.remove(spot);
+      spot.vacate();
+      availableSpots.get(spot.getSize()).add(spot);
     }
+  }
 
-    // Find vehicle's parking spot
-    public ParkingSpot findVehicleBySpot(Vehicle vehicle) {
-        return vehicleToSpotMap.get(vehicle);
-    }
+  // Find vehicle's parking spot
+  public ParkingSpot findVehicleBySpot(Vehicle vehicle) {
+    return vehicleToSpotMap.get(vehicle);
+  }
 
-    // Find which vehicle is parked in a spot
-    public Vehicle findSpotByVehicle(ParkingSpot spot) {
-        return spotToVehicleMap.get(spot);
-    }
+  // Find which vehicle is parked in a spot
+  public Vehicle findSpotByVehicle(ParkingSpot spot) {
+    return spotToVehicleMap.get(spot);
+  }
 
 }
 ```
@@ -723,7 +750,7 @@ With this enhancement explored, let’s summarize the key takeaways.
 
 In this chapter, we gathered requirements for the Parking Lot system through detailed questions and answers. We identified the core objects involved, designed the class structure, and implemented the system's key components.
 
-A key takeaway from this design is the value of modularity and clear separation of concerns. Each component, such as Vehicle, ParkingSpot, ParkingManager, and FareCalculator, handles a distinct responsibility, keeping the system maintainable and open to future enhancements.
+A key takeaway from this design is the value of modularity and clear separation of concerns. Each component, such as vehicle.Vehicle, parkingspot.ParkingSpot, ParkingManager, and FareCalculator, handles a distinct responsibility, keeping the system maintainable and open to future enhancements.
 
 Our design choices, like using ParkingLot as a facade to coordinate operations or employing the FareStrategy interface for flexible pricing, emphasize simplicity and adaptability. An alternative approach, such as embedding spot allocation and fare logic directly in ParkingLot, might reduce the number of classes but could complicate scalability by overloading a single class with multiple responsibilities. In an interview, reflecting on these decisions and articulating their benefits showcases your ability to balance trade-offs in object-oriented design.
 
